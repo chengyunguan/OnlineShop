@@ -25,4 +25,10 @@ public class UserService {
         dao.active(activeCode);
     }
 
+    public boolean checkUsername(String username) throws SQLException {
+        UserDao dao = new UserDao();
+        Long isExist = dao.checkUsername(username);
+        return isExist > 0 ? true : false;
+    }
+
 }
