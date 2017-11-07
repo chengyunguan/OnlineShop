@@ -2,23 +2,24 @@ package com.itheima.domain;
 
 public class Category {
     private String cid;
-    private String pid;
+    private String cname;
     public String getCid() {
         return cid;
     }
     public void setCid(String cid) {
         this.cid = cid;
     }
-    public String getPid() {
-        return pid;
+    public String getCname() {
+        return cname;
     }
-    public void setPid(String pid) {
-        this.pid = pid;
+    public void setCname(String cname) {
+        this.cname = cname;
     }
     @Override
     public String toString() {
-        return "Category [cid=" + cid + ", pid=" + pid + "]";
+        return "Category [cid=" + cid + ", cname=" + cname + "]";
     }
+    
     
 
 }
