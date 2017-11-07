@@ -17,14 +17,17 @@ public class IndexServlet extends HttpServlet {
         //  展示热门商品
         ProductService service = new ProductService();
         List<Product> hotProductList = service.findHotProductList();
-        System.out.println("hotProductList" + hotProductList);
         request.setAttribute("hotProductList", hotProductList);
         
         //  展示最新商品
         List<Product> newProductList = service.findNewProductList();
-        System.out.println("newProductList" + newProductList);
         request.setAttribute("newProductList", newProductList);
-        response.sendRedirect(request.getContextPath() + "/index.jsp");
+        request.getRequestDispatcher("/index.jsp").forward(request, response);
+//        response.sendRedirect("/index.jsp");
+        
+        //  直接在控制台输出从数据库中读取的商品数据
+        System.out.println("newProductList" + newProductList);
+        System.out.println("hotProductList" + hotProductList);
         
     }
 
