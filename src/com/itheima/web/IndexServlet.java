@@ -23,11 +23,6 @@ public class IndexServlet extends HttpServlet {
         List<Product> newProductList = service.findNewProductList();
         request.setAttribute("newProductList", newProductList);
         request.getRequestDispatcher("/index.jsp").forward(request, response);
-//        response.sendRedirect("/index.jsp");
-        
-        //  直接在控制台输出从数据库中读取的商品数据
-        System.out.println("newProductList" + newProductList);
-        System.out.println("hotProductList" + hotProductList);
         
     }
 
