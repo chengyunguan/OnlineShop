@@ -18,19 +18,16 @@ public class ProductListByCidServlet extends HttpServlet {
         //  获得cid
         String cid = request.getParameter("cid");
         //  获得currentPage       
-        String currentPageStr = request.getParameter("currentPage");
-        System.out.println("currentPageStr:" + currentPageStr);        
+        String currentPageStr = request.getParameter("currentPage"); 
         if (currentPageStr == null) {
             currentPageStr = "1";
         }
         int currentPage = Integer.parseInt(currentPageStr);
-        System.out.println("currentPage:" + currentPage);
         //  获得currentCount
         int currentCount = 12;
         //  通过cid查询商品
         ProductService service = new ProductService();
         PageBean<Product> pageBean = service.findPoductListByCid(cid, currentPage, currentCount);
-        System.out.println("pageBean:" + pageBean);
         //  将pageBean放到request域
         request.setAttribute("pageBean", pageBean);
         //  转发到product_list.jsp页面        

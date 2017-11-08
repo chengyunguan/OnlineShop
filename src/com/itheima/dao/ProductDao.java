@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
 
@@ -40,6 +41,14 @@ public class ProductDao {
         String sql = "select count(*) from product where cid=?";
         Long count = (Long) runner.query(sql, new ScalarHandler(), cid);
         return count.intValue();
+    }
+    
+    //  根据pid获取商品信息
+    public Product getProductInfo(String pid) throws SQLException {
+        QueryRunner runner = new QueryRunner(DataSourceUtils.getDataSource());
+        String sql = "select * from product where pid=?";
+        Product product = runner.query(sql, new BeanHandler<Product>(Product.class), pid);
+        return product;
     }
 
 }

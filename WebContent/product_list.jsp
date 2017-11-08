@@ -43,7 +43,7 @@ body {
 		<!-- 动态显示从数据库中得到的pageBean商品信息 -->
         <c:forEach items="${pageBean.list }" var="pro">
             <div class="col-md-2" style="height:250px">
-	            <a href="product_info.htm"> 
+	            <a href="${pageContext.request.contextPath }/productInfo?pid=${pro.pid}"> 
 	               <img src="${pageContext.request.contextPath }/${pro.pimage }" width="170" height="170" style="display: inline-block;">
 	            </a>
 	            <p>

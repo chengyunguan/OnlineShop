@@ -69,4 +69,14 @@
     <servlet-name>ProductListByCidServlet</servlet-name>
     <url-pattern>/productListByCid</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ProductInfoServlet</display-name>
+    <servlet-name>ProductInfoServlet</servlet-name>
+    <servlet-class>com.itheima.web.ProductInfoServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ProductInfoServlet</servlet-name>
+    <url-pattern>/productInfo</url-pattern>
+  </servlet-mapping>
 </web-app>

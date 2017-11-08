@@ -66,4 +66,15 @@ public class ProductService {
         return pageBean;
     }
 
+    public Product getProductInfo(String pid) {
+        ProductDao dao = new ProductDao();
+        Product product = null;
+        try {
+            product = dao.getProductInfo(pid);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return product;
+    }
+
 }
