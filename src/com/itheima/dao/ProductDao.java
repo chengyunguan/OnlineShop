@@ -44,7 +44,7 @@ public class ProductDao {
     }
     
     //  根据pid获取商品信息
-    public Product getProductInfo(String pid) throws SQLException {
+    public Product getProductInfoByPid(String pid) throws SQLException {
         QueryRunner runner = new QueryRunner(DataSourceUtils.getDataSource());
         String sql = "select * from product where pid=?";
         Product product = runner.query(sql, new BeanHandler<Product>(Product.class), pid);

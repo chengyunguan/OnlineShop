@@ -43,11 +43,11 @@ body {
 		<!-- 动态显示从数据库中得到的pageBean商品信息 -->
         <c:forEach items="${pageBean.list }" var="pro">
             <div class="col-md-2" style="height:250px">
-	            <a href="${pageContext.request.contextPath }/productInfo?pid=${pro.pid}"> 
+	            <a href="${pageContext.request.contextPath }/productInfo?pid=${pro.pid}&cid=${cid}&currentPage=${pageBean.currentPage }"> 
 	               <img src="${pageContext.request.contextPath }/${pro.pimage }" width="170" height="170" style="display: inline-block;">
 	            </a>
 	            <p>
-	                <a href="product_info.html" style='color: green'>${pro.pname }</a>
+	                <a href="${pageContext.request.contextPath }/productInfo?pid=${pro.pid}&cid=${cid}&currentPage=${pageBean.currentPage }" style='color: green'>${pro.pname }</a>
 	            </p>
 				<p>
 					<font color="#FF0000">商城价：&yen;${pro.shop_price }</font>
@@ -123,9 +123,11 @@ body {
 		<div style="overflow: hidden;">
 
 			<ul style="list-style: none;">
-				<li
-					style="width: 150px; height: 216; float: left; margin: 0 8px 0 0; padding: 0 18px 15px; text-align: center;"><img
-					src="products/1/cs10001.jpg" width="130px" height="130px" /></li>
+				<c:forEach items="${historyProductList }" var="pro">
+				    <li style="width: 150px; height: 216; float: left; margin: 0 8px 0 0; padding: 0 18px 15px; text-align: center;">
+				        <img src="${pro.pimage }" width="130px" height="130px" />
+                    </li>
+				</c:forEach>
 			</ul>
 
 		</div>

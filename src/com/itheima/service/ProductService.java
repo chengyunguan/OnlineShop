@@ -8,7 +8,8 @@ import com.itheima.domain.PageBean;
 import com.itheima.domain.Product;
 
 public class ProductService {
-
+    
+    //  获取热门商品列表
     public List<Product> findHotProductList() {
         ProductDao dao = new ProductDao();
         List<Product> hotProductList = null;
@@ -19,7 +20,7 @@ public class ProductService {
         }
         return hotProductList;
     }
-
+    //  获取最新商品列表
     public List<Product> findNewProductList() {
         ProductDao dao = new ProductDao();
         List<Product> newProductList = null;
@@ -38,7 +39,7 @@ public class ProductService {
         //  封装pageBean
         PageBean<Product> pageBean = new PageBean<Product>();
         //  1.封装当前页
-//        pageBean.setCurrentPage(currentPage);
+        pageBean.setCurrentPage(currentPage);
         //  2.封装每页显示的条目数
         pageBean.setCurrentCount(currentCount);
         //  3.封装总条数
@@ -66,11 +67,12 @@ public class ProductService {
         return pageBean;
     }
 
-    public Product getProductInfo(String pid) {
+    //  根据pid获取商品信息
+    public Product getProductInfoByPid(String pid) {
         ProductDao dao = new ProductDao();
         Product product = null;
         try {
-            product = dao.getProductInfo(pid);
+            product = dao.getProductInfoByPid(pid);
         } catch (SQLException e) {
             e.printStackTrace();
         }
