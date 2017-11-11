@@ -4,11 +4,11 @@
 /* header.jsp加载完毕后，去服务器端的数据库获取所有的category数据 */
     $(function() {
 		var content = "";
-		$.post("${pageContext.request.contextPath}/categoryList",
+		$.post("${pageContext.request.contextPath}/product?method=categoryList",
 			function(data) {
 			    for (var i = 0; i < data.length; i++) {
 				/* 动态创建每个<li> */
-					content += "<li><a href='${pageContext.request.contextPath}/productListByCid?cid=" 
+					content += "<li><a href='${pageContext.request.contextPath}/product?method=productListByCid&cid=" 
 						+ data[i].cid + "'>" + data[i].cname + "</a></li>";
 			    }
 			    /* 将拼接好的<li>放置到<ul>中 */
@@ -49,7 +49,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="${pageContext.request.contextPath }/index">首页</a>
+				<a class="navbar-brand" href="${pageContext.request.contextPath }/product?method=index">首页</a>
 			</div>
 
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
