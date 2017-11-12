@@ -58,7 +58,6 @@ $.validator.addMethod(
 		      flag = data.isExist;
 		  }
 	    });
-	    alert(flag);
 	    return !flag;
 	})
 

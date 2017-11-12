@@ -22,23 +22,23 @@ import com.itheima.service.UserService;
 import com.itheima.utils.CommonsUtils;
 import com.itheima.utils.MailUtils;
 
-public class UserServlet extends HttpServlet {
+public class UserServlet extends BaseServlet {
 
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String method = request.getParameter("method");
-        if ("active".equals(method)) {
-            this.active(request, response);
-        } else if ("checkUsername".equals(method)) {
-            this.checkUsername(request, response);
-        } else if ("register".equals(method)) {
-            this.register(request, response);
-        }
-    }
-
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGet(request, response);
-    }
-    
+//    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//        String method = request.getParameter("method");
+//        if ("active".equals(method)) {
+//            this.active(request, response);
+//        } else if ("checkUsername".equals(method)) {
+//            this.checkUsername(request, response);
+//        } else if ("register".equals(method)) {
+//            this.register(request, response);
+//        }
+//    }
+//
+//    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//        doGet(request, response);
+//    }
+//    
     //  激活用户功能
     public void active(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String activeCode = request.getParameter("activeCode");

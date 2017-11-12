@@ -22,24 +22,24 @@ import com.itheima.utils.JedisPoolUtils;
 
 import redis.clients.jedis.Jedis;
 
-public class ProductServlet extends HttpServlet {
+public class ProductServlet extends BaseServlet {
 
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String method = request.getParameter("method");
-        if ("categoryList".equals(method)) {
-            this.categoryList(request, response);
-        } else if ("index".equals(method)) {
-            this.index(request, response);
-        } else if ("productInfo".equals(method)) {
-            this.productInfo(request, response);
-        } else if ("productListByCid".equals(method)) {
-            this.productListByCid(request, response);
-        }
-    }
-
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGet(request, response);
-    }
+//    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//        String method = request.getParameter("method");
+//        if ("categoryList".equals(method)) {
+//            this.categoryList(request, response);
+//        } else if ("index".equals(method)) {
+//            this.index(request, response);
+//        } else if ("productInfo".equals(method)) {
+//            this.productInfo(request, response);
+//        } else if ("productListByCid".equals(method)) {
+//            this.productListByCid(request, response);
+//        }
+//    }
+//
+//    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//        doGet(request, response);
+//    }
 
     //  显示商品类别目录
     public void categoryList(HttpServletRequest request, HttpServletResponse response) throws IOException {
