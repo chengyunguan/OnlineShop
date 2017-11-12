@@ -5,14 +5,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
+import com.itheima.domain.Cart;
+import com.itheima.domain.CartItem;
 import com.itheima.domain.Category;
 import com.itheima.domain.PageBean;
 import com.itheima.domain.Product;
@@ -115,7 +119,7 @@ public class ProductServlet extends BaseServlet {
                         sb.append('-');
                     }
                     pids = sb.substring(0, sb.length() - 1);
-                    System.out.println("pids:" + pids);
+//                    System.out.println("pids:" + pids);
                 }
             }
         }
@@ -171,4 +175,93 @@ public class ProductServlet extends BaseServlet {
         request.setAttribute("historyProductList", historyProductList);
         request.getRequestDispatcher("/product_list.jsp").forward(request, response);        
     }
+    
+    //  将商品加入购物车
+    public void addProductToCart(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        //  获得session对象中的cart对象
+        HttpSession session = request.getSession();
+        ProductService service = new ProductService();
+        
+        //  获得需要添加到购物车中的商品pid
+        String pid = request.getParameter("pid");        
+        //  获得该商品的购买量
+        int buyNum = Integer.parseInt(request.getParameter("buyNum"));
+        
+        //  获得购买的商品对象product
+        Product product = service.getProductInfoByPid(pid);
+        //  计算商品的小计价格
+        double subTotal = product.getShop_price() * buyNum;
+        
+        //  封装cartItem对象
+        CartItem item = new CartItem();
+        item.setProduct(product);
+        item.setBuyNum(buyNum);
+        item.setSubTotal(subTotal);
+        
+        //  获得购物车对象，并判断购物车是否存在
+        Cart cart = (Cart) session.getAttribute("cart");
+        //  判断cart是否存在，若不存在，则创建它
+        if (cart == null) {
+            cart = new Cart();
+        }
+        //  获得cart中的购物车项列表
+        Map<String, CartItem> cartItems = cart.getCartItems();
+        
+        //  判断所购买的product是否存在与cart中
+        if (cartItems.containsKey(pid)) {
+            //  如果存在，将原来的buyNum与新加入购物车的数量相加，原来的subTotal与新加入购物车的小计相加
+            CartItem cartItem = cartItems.get(pid);
+            cartItem.setBuyNum(cartItem.getBuyNum() + buyNum);
+            cartItem.setSubTotal(cartItem.getSubTotal() + subTotal);
+        } else {
+            //  如果不存在，将cartItem放入cartItems
+            cartItems.put(pid, item);
+        }
+        double total = cart.getTotal();
+        total += subTotal;
+        cart.setTotal(total);
+        
+        //  将新的购物车对象cart放入session中
+        session.setAttribute("cart", cart);
+        //  用重定向而不是转发是为了避免刷新cart.jsp页面时 重复加入购物车
+        response.sendRedirect(request.getContextPath() + "/cart.jsp");       
+        
+    }
+    
+    //  删除购物车中的商品
+    public void delProductFromCart(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String pid = request.getParameter("pid");
+        HttpSession session = request.getSession();
+        ProductService service = new ProductService();
+       
+        Cart cart = (Cart) session.getAttribute("cart");
+        Map<String, CartItem> cartItems = cart.getCartItems();
+        if (cartItems.containsKey(pid)) {
+            //  获得该商品项
+            CartItem cartItem = cartItems.get(pid);
+            //  计算新的总计价格total
+            double minusSubTotal = cartItem.getSubTotal();
+            double total = cart.getTotal();
+            total -= minusSubTotal;
+            cart.setTotal(total);
+            //  删除该商品
+            cartItems.remove(pid);
+        }
+        
+        //  将删除过商品的cart放入session
+        session.setAttribute("cart", cart);
+        
+        response.sendRedirect(request.getContextPath() + "/cart.jsp");
+        
+    }
+    
+    //  清空购物车
+    public void clearCart(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpSession session = request.getSession();
+        session.removeAttribute("cart");
+        response.sendRedirect(request.getContextPath() + "/cart.jsp");
+    }
+        
+    
+    
 }

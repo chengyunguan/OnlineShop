@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,6 +24,15 @@ body {
 }
 </style>
 </head>
+
+<!-- 加入购物车 -->
+<script type="text/javascript">
+    function addCart() {
+	   var buyNum = $("#buyNum").val();
+	   location.href = "${pageContext.request.contextPath}/product?method=addProductToCart&pid=${product.pid}&buyNum=" + buyNum;
+
+    }
+</script>
 
 <body>
 	<!-- 引入header.jsp -->
@@ -68,16 +78,16 @@ body {
 
 						<div
 							style="border-bottom: 1px solid #faeac7; margin-top: 20px; padding-left: 10px;">
-							购买数量: <input id="quantity" name="quantity" value="1"
+							购买数量: <input id="buyNum" name="buyNum" value="1"
 								maxlength="4" size="10" type="text">
 						</div>
 
 						<div style="margin: 20px 0 10px 0;; text-align: center;">
-							<a href="cart.htm"> <input
-								style="background: url('./images/product.gif') no-repeat scroll 0 -600px rgba(0, 0, 0, 0); height: 36px; width: 127px;"
-								value="加入购物车" type="button">
+							<a href="javascript:void(0)" onclick="addCart()"> 
+							    <input style="background: url('./images/product.gif') no-repeat scroll 0 -600px rgba(0, 0, 0, 0);
+							     height: 36px; width: 127px;" value="加入购物车" type="button">
 							</a> &nbsp;收藏商品
-							
+
 						</div>
 						<div>
 							<a href="${pageContext.request.contextPath}/productListByCid?cid=${cid }&currentPage=${currentPage}"> 返回商品列表页面 </a>
