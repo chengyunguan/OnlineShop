@@ -4,8 +4,10 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.itheima.dao.ProductDao;
+import com.itheima.domain.Orders;
 import com.itheima.domain.PageBean;
 import com.itheima.domain.Product;
+import com.itheima.utils.DataSourceUtils;
 
 public class ProductService {
     
@@ -77,6 +79,19 @@ public class ProductService {
             e.printStackTrace();
         }
         return product;
+    }
+    
+    //  提交订单，将订单和订单项的数据存储到数据库
+    public void submitOrders(Orders orders) throws SQLException {
+        ProductDao dao = new ProductDao();
+        System.out.println("in database front");
+        //  开启事物
+        DataSourceUtils.startTransaction();
+        dao.submitOrders(orders);
+        dao.submitOrderItem(orders);
+        DataSourceUtils.commitAndRelease();
+
+        System.out.println("in database back");
     }
 
 }

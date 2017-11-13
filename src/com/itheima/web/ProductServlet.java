@@ -1,8 +1,11 @@
 package com.itheima.web;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -18,32 +21,19 @@ import com.google.gson.Gson;
 import com.itheima.domain.Cart;
 import com.itheima.domain.CartItem;
 import com.itheima.domain.Category;
+import com.itheima.domain.OrderItem;
+import com.itheima.domain.Orders;
 import com.itheima.domain.PageBean;
 import com.itheima.domain.Product;
+import com.itheima.domain.User;
 import com.itheima.service.CategoryListService;
 import com.itheima.service.ProductService;
+import com.itheima.utils.CommonsUtils;
 import com.itheima.utils.JedisPoolUtils;
 
 import redis.clients.jedis.Jedis;
 
 public class ProductServlet extends BaseServlet {
-
-//    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        String method = request.getParameter("method");
-//        if ("categoryList".equals(method)) {
-//            this.categoryList(request, response);
-//        } else if ("index".equals(method)) {
-//            this.index(request, response);
-//        } else if ("productInfo".equals(method)) {
-//            this.productInfo(request, response);
-//        } else if ("productListByCid".equals(method)) {
-//            this.productListByCid(request, response);
-//        }
-//    }
-//
-//    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        doGet(request, response);
-//    }
 
     //  显示商品类别目录
     public void categoryList(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -261,6 +251,71 @@ public class ProductServlet extends BaseServlet {
         session.removeAttribute("cart");
         response.sendRedirect(request.getContextPath() + "/cart.jsp");
     }
+    
+    //  提交商品订单
+    public void submitOrder(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpSession session = request.getSession();
+        //  判断用户是否登录，若否，跳转到登录界面
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+        }
+        
+        //  封装orders对象
+        Orders orders = new Orders();
+        //  1.订单号
+        String uuid = CommonsUtils.getUUID();
+        orders.setOid(uuid);
+        //  2.下单时间
+        orders.setOrdertime(new Date());
+        //  3.订单总金额
+        Cart cart = (Cart) session.getAttribute("cart");
+        orders.setTotal(cart.getTotal());
+        //  4.订单状态，1表示已付款，0表示未付款
+        orders.setState(0);
+        //  5.订单地址
+        orders.setAddress(null);
+        //  6.收货人姓名
+        orders.setName(null);
+        //  7.收货人电话
+        orders.setTelephone(0);
+        //  8.下单的用户
+        orders.setUser(user);
+        //  9.该订单中的订单项
+        Map<String, CartItem> cartItems = cart.getCartItems();
+        List<OrderItem> orderItems = orders.getOrderItems();
+        //  至此行代码之前代码运行正常 。时间2017-11-13
+        for (CartItem cartItem : cartItems.values()) {
+            //  封装每个订单项
+            OrderItem orderItem = new OrderItem();
+            //  1.订单项的id
+            orderItem.setItemid(CommonsUtils.getUUID());            
+            //  2.订单项的数量
+            orderItem.setCount(cartItem.getBuyNum());
+            //  3.单个订单项的小计金额
+            orderItem.setSubtotal(cartItem.getSubTotal());
+            //  4.订单项包含的商品
+            orderItem.setProduct(cartItem.getProduct());
+            //  5.该订单项属于哪个订单
+            orderItem.setOrders(orders);
+            //  将封装好的orderItem添加到订单order中
+            orderItems.add(orderItem);
+        }
+        //  将订单放入数据库中
+        ProductService service = new ProductService();
+        try {
+            service.submitOrders(orders);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        session.setAttribute("orders", orders);
+        
+        //跳转到order_info.jsp页面
+        response.sendRedirect(request.getContextPath() + "/order_info.jsp");
+    }
+    
+    
         
     
     
