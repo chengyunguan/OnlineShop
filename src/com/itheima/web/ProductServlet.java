@@ -254,6 +254,7 @@ public class ProductServlet extends BaseServlet {
     
     //  提交商品订单
     public void submitOrder(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        System.out.println("method submitOrders processing...");
         HttpSession session = request.getSession();
         //  判断用户是否登录，若否，跳转到登录界面
         User user = (User) session.getAttribute("user");
@@ -301,6 +302,8 @@ public class ProductServlet extends BaseServlet {
             //  将封装好的orderItem添加到订单order中
             orderItems.add(orderItem);
         }
+
+        System.out.println("orders;" + orders.toString());
         //  将订单放入数据库中
         ProductService service = new ProductService();
         try {

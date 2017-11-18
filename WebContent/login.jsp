@@ -75,17 +75,20 @@ font {
 							<div class="col-sm-3">
 								<input type="text" class="form-control" id="inputPassword3"
 									placeholder="请输入验证码">
-							</div>
+							</div>							
 							<div class="col-sm-3">
 								<img src="./image/captcha.jhtml" />
 							</div>
-						</div>
+						</div>		
+                            &nbsp;&nbsp;&nbsp;&nbsp;<a style="color: red;">${loginError}</a>
 						<div class="form-group">
 							<div class="col-sm-offset-2 col-sm-10">
 								<div class="checkbox">
-									<label> <input type="checkbox"> 自动登录
-									</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <label> <input
-										type="checkbox"> 记住用户名
+									<label> 
+									   <input type="checkbox" name="autologin" value="autologin"> 自动登录
+									</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<label> 
+									   <input type="checkbox"> 记住用户名
 									</label>
 								</div>
 							</div>

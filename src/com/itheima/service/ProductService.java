@@ -87,6 +87,8 @@ public class ProductService {
         System.out.println("in database front");
         //  开启事物
         DataSourceUtils.startTransaction();
+
+        System.out.println("orders;" + orders.toString());
         dao.submitOrders(orders);
         dao.submitOrderItem(orders);
         DataSourceUtils.commitAndRelease();

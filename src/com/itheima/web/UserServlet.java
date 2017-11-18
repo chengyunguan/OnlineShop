@@ -30,13 +30,13 @@ public class UserServlet extends BaseServlet {
     // 激活用户功能
     public void active(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String activeCode = request.getParameter("activeCode");
-        System.out.println("activeCode1:" + activeCode);
         UserService service = new UserService();
         try {
             service.active(activeCode);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        response.sendRedirect(request.getContextPath() + "/activeSuccess.jsp");
     }
 
     // 校验用户名是否存在的功能
@@ -44,7 +44,6 @@ public class UserServlet extends BaseServlet {
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         String username = request.getParameter("username");
-        System.out.println(username);
         UserService service = new UserService();
         boolean isExist = false;
         try {
@@ -99,7 +98,6 @@ public class UserServlet extends BaseServlet {
         // 将user传递给service层
         UserService service = new UserService();
         boolean isRegisterSuccess = service.regist(user);
-        System.out.println(isRegisterSuccess);
 
         if (isRegisterSuccess) {
             String emailMsg = "您好，请点击该链接激活您的账户：" + "<a href=\"http://localhost:8080/SHOP/user?method=active&activeCode="
