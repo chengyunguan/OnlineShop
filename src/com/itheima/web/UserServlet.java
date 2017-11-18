@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.Map;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -87,6 +88,10 @@ public class UserServlet extends BaseServlet {
 
         // private String uid;
         user.setUid(CommonsUtils.getUUID());
+        //  密码明文加密
+        String password = user.getPassword();
+        password = MD5Utils.md5(password);
+        user.setPassword(password);
         // private String telephone;
         user.setTelephone(null);
         // private int state;//是否激活
@@ -126,15 +131,31 @@ public class UserServlet extends BaseServlet {
         UserService service = new UserService();
         User user = null;
         try {
-            user = service.login(username, username);
+            user = service.login(username, password);
         } catch (SQLException e) {
             e.printStackTrace();
         }
         if (user != null) {
+            String autoLogin = request.getParameter("autologin");
+            //  判断用户是否勾选自动登录
+            if (autoLogin != null) {
+                //  创建cookieds
+                Cookie cookie_username = new Cookie("username", username);
+                Cookie cookie_password = new Cookie("password", password);
+                //  设置最大持久化时间
+                cookie_username.setMaxAge(60 * 60);
+                cookie_password.setMaxAge(60 * 60);
+                //  设置cookie最大路径
+                cookie_username.setPath(request.getContextPath());
+                cookie_password.setPath(request.getContextPath());
+                //  发送cookie
+                response.addCookie(cookie_username);
+                response.addCookie(cookie_password);
+            }
             session.setAttribute("user", user);
             response.sendRedirect(request.getContextPath() + "/index.jsp");
         } else {
-            request.setAttribute("loginError", "用户名或密码错误");
+            request.setAttribute("loginError", "用户名或密码错误，请重新输入");
             request.getRequestDispatcher("/login.jsp").forward(request, response);
         }
     }
