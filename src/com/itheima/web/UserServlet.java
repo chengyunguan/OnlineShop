@@ -2,6 +2,7 @@ package com.itheima.web;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URLEncoder;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -139,9 +140,11 @@ public class UserServlet extends BaseServlet {
             String autoLogin = request.getParameter("autologin");
             //  判断用户是否勾选自动登录
             if (autoLogin != null) {
+                //  对用户名进行utf-8编码
+                String cookie_code = URLEncoder.encode(username, "UTF-8");
                 //  创建cookieds
-                Cookie cookie_username = new Cookie("username", username);
-                Cookie cookie_password = new Cookie("password", password);
+                Cookie cookie_username = new Cookie("cookie_username", cookie_code);
+                Cookie cookie_password = new Cookie("cookie_password", password);
                 //  设置最大持久化时间
                 cookie_username.setMaxAge(60 * 60);
                 cookie_password.setMaxAge(60 * 60);
@@ -151,7 +154,7 @@ public class UserServlet extends BaseServlet {
                 //  发送cookie
                 response.addCookie(cookie_username);
                 response.addCookie(cookie_password);
-            }
+            }             
             session.setAttribute("user", user);
             response.sendRedirect(request.getContextPath() + "/index.jsp");
         } else {

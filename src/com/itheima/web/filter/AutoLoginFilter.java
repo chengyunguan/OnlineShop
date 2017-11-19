@@ -28,7 +28,6 @@ public class AutoLoginFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        System.out.println("This is in doFilter");
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
         HttpSession session = req.getSession();
@@ -46,8 +45,6 @@ public class AutoLoginFilter implements Filter {
                     cookie_password = cookie.getValue();
                 }
             }
-            System.out.println("cookie_username:" + cookie_username);
-            System.out.println("cookie_password:" + cookie_password);
         }
         //  判断用户名密码是否是null
         if (cookie_username != null && cookie_password != null) {
